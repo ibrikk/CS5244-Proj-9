@@ -23,8 +23,6 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 @ApplicationPath("/")
 @Path("/")
 public class ApiResource {
@@ -163,11 +161,7 @@ public class ApiResource {
     public OrderDetails placeOrder(OrderForm orderForm) {
 
         try {
-            System.out.println("orderForm: " + orderForm.getCustomerForm().getName());
-            System.out.println("orderForm Cart: " + orderForm.getCart().getItems().size());
             long orderId = orderService.placeOrder(orderForm.getCustomerForm(), orderForm.getCart());
-            System.out.println("vaabswe ishmelimir??!!");
-            System.out.println("orderId: " + orderId);
             throw new ApiException.ValidationFailure("Transactions have not been implemented yet.");
 
             // NOTE: MORE CODE PROVIDED NEXT PROJECT
@@ -179,7 +173,5 @@ public class ApiResource {
             throw new ApiException("order placement failed", e);
         }
     }
-    // @JsonProperty("itemArray")
-    // private List<ShoppingCartItem> items;
 
 }

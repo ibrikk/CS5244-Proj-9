@@ -26,10 +26,8 @@ public class DefaultOrderService implements OrderService {
 
 	@Override
 	public long placeOrder(CustomerForm customerForm, ShoppingCart cart) {
-		System.out.println("customerForm name: " + customerForm.getName());
-		System.out.println("cart: " + cart.getItems());
-		validateCustomer(customerForm);
-		validateCart(cart);
+		// validateCustomer(customerForm);
+		// validateCart(cart);
 		System.out.println("Order placed successfully");
 		// NOTE: MORE CODE PROVIDED NEXT PROJECT
 
