@@ -2,7 +2,13 @@ import React, { ChangeEvent, useContext, useState } from "react";
 
 import "../assets/css/CheckoutPopUp.css";
 import { Barcode } from "lucide-react";
-import { CustomerForm, ServerErrorResponse, months, years } from "../Types";
+import {
+  CustomerForm,
+  OrderDetails,
+  ServerErrorResponse,
+  months,
+  years,
+} from "../Types";
 import {
   asDollarsAndCents,
   calculateTotalQuantity,
@@ -13,6 +19,7 @@ import {
 } from "../Util";
 import { CartContext } from "../contexts/CartContext";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const CheckoutPopup: React.FC = () => {
   const now = new Date();
@@ -139,23 +146,44 @@ const CheckoutPopup: React.FC = () => {
     return isValid;
   };
 
-  const submitOrder = (e: React.FormEvent<HTMLFormElement>) => {
+  const submitOrder = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (validateForm()) {
-      console.log("Form submitted:", formData);
       setCheckOutStatus(CheckoutStatus.Pending);
-      setTimeout(() => {
+      console.log("Form submitted:", formData);
+      const orders = await placeOrder(formData);
+      if (orders) {
         setCheckOutStatus(CheckoutStatus.OK);
-        setTimeout(() => {
-          navigate("/confirmation");
-        }, 1000);
-      }, 1000);
-      // Send the data to your server
-      dispatch({ type: "CLEAR" });
+        navigate("/confirmation");
+      } else {
+        console.log("Error placing order");
+      }
     } else {
       setCheckOutStatus(CheckoutStatus.Error);
       console.log("Form has errors");
     }
+  };
+
+  const placeOrder = async (customerForm: CustomerForm) => {
+    const order = { customerForm: customerForm, cart: { itemArray: cart } };
+
+    const orders = JSON.stringify(order);
+    console.log("orders", orders);
+    const url = "api/orders";
+    const orderDetails: OrderDetails = await axios
+      .post(url, orders, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        dispatch({ type: "CLEAR" });
+        console.log("Order placed successfully", response.data);
+        return response.data;
+      })
+      .catch((error) => console.log(error));
+    console.log("order deatils: ", orderDetails);
+    return orderDetails;
   };
 
   return (
