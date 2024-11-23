@@ -3,13 +3,18 @@ package api;
 import business.ApplicationContext;
 import business.category.Category;
 import business.category.CategoryDao;
+import business.order.OrderDetails;
+import business.order.OrderForm;
+import business.order.OrderService;
 import business.book.Book;
 import business.book.BookDao;
-
+import business.cart.ShoppingCartItem;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.ApplicationPath;
+import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DefaultValue;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -18,12 +23,15 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @ApplicationPath("/")
 @Path("/")
 public class ApiResource {
 
     private final BookDao bookDao = ApplicationContext.INSTANCE.getBookDao();
     private final CategoryDao categoryDao = ApplicationContext.INSTANCE.getCategoryDao();
+    private final OrderService orderService = ApplicationContext.INSTANCE.getOrderService();
 
     @GET
     @Path("categories")
@@ -147,5 +155,28 @@ public class ApiResource {
             throw new ApiException(String.format("Suggested books lookup by category-name %s failed", categoryName), e);
         }
     }
+
+    @POST
+    @Path("orders")
+    @Consumes(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+    @Produces(jakarta.ws.rs.core.MediaType.APPLICATION_JSON)
+    public OrderDetails placeOrder(OrderForm orderForm) {
+
+        try {
+
+            long orderId = orderService.placeOrder(orderForm.getCustomerForm(), orderForm.getCart());
+            throw new ApiException.ValidationFailure("Transactions have not been implemented yet.");
+
+            // NOTE: MORE CODE PROVIDED NEXT PROJECT
+
+        } catch (ApiException e) {
+            // NOTE: all validation errors go through here
+            throw e;
+        } catch (Exception e) {
+            throw new ApiException("order placement failed", e);
+        }
+    }
+    // @JsonProperty("itemArray")
+    // private List<ShoppingCartItem> items;
 
 }
