@@ -8,7 +8,6 @@ import business.customer.CustomerForm;
 
 import java.time.DateTimeException;
 import java.time.YearMonth;
-import java.util.Date;
 
 public class DefaultOrderService implements OrderService {
 
@@ -26,8 +25,8 @@ public class DefaultOrderService implements OrderService {
 
 	@Override
 	public long placeOrder(CustomerForm customerForm, ShoppingCart cart) {
-		// validateCustomer(customerForm);
-		// validateCart(cart);
+		validateCustomer(customerForm);
+		validateCart(cart);
 		System.out.println("Order placed successfully");
 		// NOTE: MORE CODE PROVIDED NEXT PROJECT
 
@@ -37,41 +36,73 @@ public class DefaultOrderService implements OrderService {
 	private void validateCustomer(CustomerForm customerForm) {
 
 		String name = customerForm.getName();
+		String address = customerForm.getAddress();
+		String phone = customerForm.getPhone();
+		String email = customerForm.getEmail();
+		String ccNumber = customerForm.getCcNumber();
 
 		if (name == null || name.equals("") || name.length() > 45) {
-			throw new ApiException.ValidationFailure("Invalid name field");
+			throw new ApiException.ValidationFailure("name", "Invalid name field");
 		}
 
-		// TODO: Validation checks for address, phone, email, ccNumber
+		if (address == null || address.equals("") || address.length() < 4 || address.length() > 45) {
+			throw new ApiException.ValidationFailure("address", "Invalid address field");
+
+		}
+		// Removing all spaces, dashes, and patterns from the string
+		phone = phone.replaceAll("[^0-9]", "");
+		if (phone == null || phone.equals("") || phone.length() != 10) {
+			throw new ApiException.ValidationFailure("phone", "Invalid phone field");
+		}
+
+		if (email == null || email.equals("") || email.contains(" ") || !email.contains("@") || email.endsWith(".")) {
+			throw new ApiException.ValidationFailure("email", "Invalid email field");
+		}
+
+		ccNumber = ccNumber.replaceAll("[^0-9]", "");
+		if (ccNumber == null || ccNumber.equals("") || ccNumber.length() < 14 || ccNumber.length() > 16) {
+			throw new ApiException.ValidationFailure("ccNumber", "Invalid credit card number");
+		}
 
 		if (expiryDateIsInvalid(customerForm.getCcExpiryMonth(), customerForm.getCcExpiryYear())) {
-			throw new ApiException.ValidationFailure("Invalid expiry date");
-
+			throw new ApiException.ValidationFailure("Please enter a valid expiration date.");
 		}
 	}
 
 	private boolean expiryDateIsInvalid(String ccExpiryMonth, String ccExpiryYear) {
-
-		// TODO: return true when the provided month/year is before the current
-		// month/yeaR
-		// HINT: Use Integer.parseInt and the YearMonth class
+		try {
+			YearMonth expiryDate = YearMonth.of(Integer.parseInt(ccExpiryYear), Integer.parseInt(ccExpiryMonth));
+			YearMonth currentDate = YearMonth.now();
+			if (expiryDate.isBefore(currentDate)) {
+				return true;
+			}
+		} catch (DateTimeException e) {
+			return true;
+		}
 		return false;
 
 	}
 
 	private void validateCart(ShoppingCart cart) {
 
-		if (cart.getItems().size() <= 0) {
+		if (cart.getItems().size() <= 0 || cart.getItems() == null) {
 			throw new ApiException.ValidationFailure("Cart is empty.");
 		}
 
 		cart.getItems().forEach(item -> {
-			if (item.getQuantity() < 0 || item.getQuantity() > 99) {
+			if (item.getQuantity() < 1 || item.getQuantity() > 99) {
 				throw new ApiException.ValidationFailure("Invalid quantity");
 			}
+			if (item.getPrice() != bookDao.findByBookId(item.getBookId()).price()) {
+				throw new ApiException.ValidationFailure("Invalid price");
+			}
+			if (item.getCategoryId() != bookDao.findByBookId(item.getBookId()).categoryId()) {
+				throw new ApiException.ValidationFailure("Invalid category");
+			}
 			Book databaseBook = bookDao.findByBookId(item.getBookId());
-			// TODO: complete the required validations
+			if (databaseBook == null) {
+				throw new ApiException.ValidationFailure("Invalid book id");
+			}
 		});
 	}
-
 }

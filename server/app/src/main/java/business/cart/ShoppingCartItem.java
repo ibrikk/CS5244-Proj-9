@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * This class holds the de-serialized JSON data for cart items.
  *
  * (We ignore any extra elements that the client sends
- *  that this class does not require, for example "_type").
+ * that this class does not require, for example "_type").
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ShoppingCartItem {
@@ -44,11 +44,32 @@ public class ShoppingCartItem {
 
 	/**
 	 * A quick accessor for getting the book id for this item.
+	 * 
 	 * @return the id of the book in this cart item
 	 */
 	@JsonIgnore
 	public long getBookId() {
 		return bookForm.getBookId();
+	}
+
+	/**
+	 * A quick accessor for getting the price of the book in this item.
+	 * 
+	 * @return the price of the book in this cart item
+	 */
+	@JsonIgnore
+	public int getPrice() {
+		return bookForm.getPrice();
+	}
+
+	/**
+	 * A quick accessor for getting the category id of the book in this item.
+	 * 
+	 * @return the category id of the book in this cart item
+	 */
+	@JsonIgnore
+	public long getCategoryId() {
+		return bookForm.getCategoryId();
 	}
 
 }
