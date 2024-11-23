@@ -70,8 +70,13 @@ const CheckoutPopup: React.FC = () => {
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    validateField(name, value);
+    let parsedValue: string | number = value;
+    if (name === "ccExpiryMonth" || name === "ccExpiryYear") {
+      parsedValue = parseInt(value, 10);
+    }
+    validateField(name, parsedValue.toString());
     setFormData((prev) => ({ ...prev, [name]: value }));
+    console.log("Form data: ", formData);
   };
 
   const validateField = (name: string, value: string) => {
@@ -284,8 +289,8 @@ const CheckoutPopup: React.FC = () => {
                 <option value="" disabled>
                   Select Month
                 </option>
-                {months.map((month) => (
-                  <option key={month} value={month}>
+                {months.map((month, index) => (
+                  <option key={index + 1} value={index + 1}>
                     {month}
                   </option>
                 ))}
@@ -305,7 +310,7 @@ const CheckoutPopup: React.FC = () => {
                   Select Year
                 </option>
                 {years.map((year) => (
-                  <option key={year} value={year}>
+                  <option key={year} value={nowYear + year}>
                     {nowYear + year}
                   </option>
                 ))}
