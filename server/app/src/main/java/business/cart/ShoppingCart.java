@@ -2,6 +2,7 @@ package business.cart;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
@@ -10,13 +11,14 @@ import java.util.List;
  * This class holds the de-serialized JSON data.
  *
  * (We ignore any extra elements that the client sends
- *  that this class does not require.).
+ * that this class does not require.).
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ShoppingCart {
 
 	private static final int SURCHARGE = 500;
 
+	@JsonProperty("itemArray")
 	private List<ShoppingCartItem> items;
 
 	public ShoppingCart() {
@@ -44,8 +46,8 @@ public class ShoppingCart {
 	@JsonIgnore
 	public int getComputedSubtotal() {
 		return items.stream()
-			.mapToInt(item -> item.getQuantity() * item.getBookForm().getPrice())
-			.sum();
+				.mapToInt(item -> item.getQuantity() * item.getBookForm().getPrice())
+				.sum();
 	}
 
 }

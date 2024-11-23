@@ -25,20 +25,20 @@ public class DefaultOrderService implements OrderService {
 	}
 
 	@Override
-    public long placeOrder(CustomerForm customerForm, ShoppingCart cart) {
-
+	public long placeOrder(CustomerForm customerForm, ShoppingCart cart) {
+		System.out.println("customerForm name: " + customerForm.getName());
+		System.out.println("cart: " + cart.getItems());
 		validateCustomer(customerForm);
 		validateCart(cart);
-
+		System.out.println("Order placed successfully");
 		// NOTE: MORE CODE PROVIDED NEXT PROJECT
 
 		return -1;
 	}
 
-
 	private void validateCustomer(CustomerForm customerForm) {
 
-    	String name = customerForm.getName();
+		String name = customerForm.getName();
 
 		if (name == null || name.equals("") || name.length() > 45) {
 			throw new ApiException.ValidationFailure("Invalid name field");
@@ -54,7 +54,8 @@ public class DefaultOrderService implements OrderService {
 
 	private boolean expiryDateIsInvalid(String ccExpiryMonth, String ccExpiryYear) {
 
-		// TODO: return true when the provided month/year is before the current month/yeaR
+		// TODO: return true when the provided month/year is before the current
+		// month/yeaR
 		// HINT: Use Integer.parseInt and the YearMonth class
 		return false;
 
@@ -66,7 +67,7 @@ public class DefaultOrderService implements OrderService {
 			throw new ApiException.ValidationFailure("Cart is empty.");
 		}
 
-		cart.getItems().forEach(item-> {
+		cart.getItems().forEach(item -> {
 			if (item.getQuantity() < 0 || item.getQuantity() > 99) {
 				throw new ApiException.ValidationFailure("Invalid quantity");
 			}
