@@ -163,8 +163,9 @@ public class ApiResource {
     public OrderDetails placeOrder(OrderForm orderForm) {
 
         try {
-
+            System.out.println("orderForm: " + orderForm.getCustomerForm().getName());
             long orderId = orderService.placeOrder(orderForm.getCustomerForm(), orderForm.getCart());
+            System.out.println("orderId: " + orderId);
             throw new ApiException.ValidationFailure("Transactions have not been implemented yet.");
 
             // NOTE: MORE CODE PROVIDED NEXT PROJECT
