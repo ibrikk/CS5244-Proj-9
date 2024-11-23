@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useContext, useState } from "react";
+import React, { ChangeEvent, useContext, useEffect, useState } from "react";
 
 import "../assets/css/CheckoutPopUp.css";
 import { Barcode } from "lucide-react";
@@ -43,6 +43,10 @@ const CheckoutPopup: React.FC = () => {
     ccExpiryYear: 0,
   });
 
+  // useEffect(() => {
+  //   console.log("Updated formData: ", formData);
+  // }, [formData]);
+
   const [nameError, setNameError] = useState("");
   const [addressError, setAddressError] = useState("");
   const [phoneError, setPhoneError] = useState("");
@@ -70,13 +74,17 @@ const CheckoutPopup: React.FC = () => {
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    let parsedValue: string | number = value;
-    if (name === "ccExpiryMonth" || name === "ccExpiryYear") {
-      parsedValue = parseInt(value, 10);
-    }
+    // console.log("Name: ", name, "Value: ", value);
+    const parsedValue =
+      name === "ccExpiryMonth" || name === "ccExpiryYear"
+        ? parseInt(value, 10)
+        : value;
+
+    // Validate the field
     validateField(name, parsedValue.toString());
     setFormData((prev) => ({ ...prev, [name]: value }));
-    console.log("Form data: ", formData);
+
+    // console.log("Form data: ", formData);
   };
 
   const validateField = (name: string, value: string) => {
@@ -116,18 +124,18 @@ const CheckoutPopup: React.FC = () => {
           setCcNumberError("");
         }
         break;
-      case "ccExpiryMonth":
-        setFormData((prevFormData) => ({
-          ...prevFormData,
-          [name]: parseInt(value, 10),
-        }));
-        break;
-      case "ccExpiryYear":
-        setFormData((prevFormData) => ({
-          ...prevFormData,
-          [name]: parseInt(value, 10),
-        }));
-        break;
+      // case "ccExpiryMonth":
+      //   setFormData((prevFormData) => ({
+      //     ...prevFormData,
+      //     [name]: parseInt(value),
+      //   }));
+      //   break;
+      // case "ccExpiryYear":
+      //   setFormData((prevFormData) => ({
+      //     ...prevFormData,
+      //     [name]: parseInt(value),
+      //   }));
+      //   break;
       default:
         break;
     }
@@ -283,7 +291,7 @@ const CheckoutPopup: React.FC = () => {
                 className="checkout-select"
                 id="ccExpiryMonth"
                 name="ccExpiryMonth"
-                value={formData.ccExpiryMonth}
+                value={formData.ccExpiryMonth || ""}
                 onChange={handleInputChange}
               >
                 <option value="" disabled>
@@ -303,7 +311,7 @@ const CheckoutPopup: React.FC = () => {
                 className="checkout-select"
                 id="ccExpiryYear"
                 name="ccExpiryYear"
-                value={formData.ccExpiryYear}
+                value={formData.ccExpiryYear || ""}
                 onChange={handleInputChange}
               >
                 <option value="" disabled>
