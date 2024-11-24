@@ -8,7 +8,6 @@ import business.order.OrderForm;
 import business.order.OrderService;
 import business.book.Book;
 import business.book.BookDao;
-import business.cart.ShoppingCartItem;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.ApplicationPath;
 import jakarta.ws.rs.Consumes;
@@ -170,7 +169,7 @@ public class ApiResource {
             // NOTE: all validation errors go through here
             throw e;
         } catch (Exception e) {
-            throw new ApiException("order placement failed", e);
+            throw new ApiException("Order placement failed", e);
         }
     }
 

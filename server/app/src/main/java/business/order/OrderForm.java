@@ -1,11 +1,6 @@
 package business.order;
 
-import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import business.cart.ShoppingCart;
-import business.cart.ShoppingCartItem;
 import business.customer.CustomerForm;
 
 /**

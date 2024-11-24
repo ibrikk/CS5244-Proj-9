@@ -112,7 +112,7 @@ const CheckoutPopup: React.FC = () => {
         break;
       case "phone":
         if (!isMobilePhone(value)) {
-          setPhoneError("Phone number mis not valid!");
+          setPhoneError("Phone number not valid!");
         } else {
           setPhoneError("");
         }
