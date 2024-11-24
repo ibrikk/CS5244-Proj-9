@@ -91,16 +91,17 @@ public class DefaultOrderService implements OrderService {
 			if (item.getQuantity() < 1 || item.getQuantity() > 99) {
 				throw new ApiException.ValidationFailure("Invalid quantity");
 			}
+			Book databaseBook = bookDao.findByBookId(item.getBookId());
+			if (databaseBook == null) {
+				throw new ApiException.ValidationFailure("Invalid book id");
+			}
 			if (item.getPrice() != bookDao.findByBookId(item.getBookId()).price()) {
 				throw new ApiException.ValidationFailure("Invalid price");
 			}
 			if (item.getCategoryId() != bookDao.findByBookId(item.getBookId()).categoryId()) {
 				throw new ApiException.ValidationFailure("Invalid category");
 			}
-			Book databaseBook = bookDao.findByBookId(item.getBookId());
-			if (databaseBook == null) {
-				throw new ApiException.ValidationFailure("Invalid book id");
-			}
+
 		});
 	}
 }
