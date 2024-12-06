@@ -90,52 +90,51 @@ const CheckoutPopup: React.FC = () => {
   const validateField = (name: string, value: string) => {
     switch (name) {
       case "name":
-        if (value.length < 4 || value.length > 45) {
+        if (value.trim() === "") {
+          setNameError("Name is required!");
+        } else if (value.length < 4 || value.length > 45) {
           setNameError("Name must be at least 4 characters long!");
         } else {
           setNameError("");
         }
         break;
       case "email":
-        if (!isvalidEmail(value)) {
+        if (value.trim() === "") {
+          setEmailError("Email is required!");
+        } else if (!isvalidEmail(value)) {
           setEmailError("Invalid email address!");
         } else {
           setEmailError("");
         }
         break;
       case "address":
-        if (value.length < 10) {
+        if (value.trim() === "") {
+          setAddressError("Address is required!");
+        } else if (value.length < 10) {
           setAddressError("Address must be at least 10 characters long!");
         } else {
           setAddressError("");
         }
         break;
       case "phone":
-        if (!isMobilePhone(value)) {
+        if (value.trim() === "") {
+          setPhoneError("Phone number is required!");
+        } else if (!isMobilePhone(value)) {
           setPhoneError("Phone number not valid!");
         } else {
           setPhoneError("");
         }
         break;
       case "ccNumber":
-        if (!isCreditCard(value)) {
+        if (value.trim() === "") {
+          setCcNumberError("Credit card number is required!");
+        } else if (!isCreditCard(value)) {
           setCcNumberError("Card number is not valid!");
         } else {
           setCcNumberError("");
         }
         break;
-      // case "ccExpiryMonth":
-      //   setFormData((prevFormData) => ({
-      //     ...prevFormData,
-      //     [name]: parseInt(value),
-      //   }));
-      //   break;
-      // case "ccExpiryYear":
-      //   setFormData((prevFormData) => ({
-      //     ...prevFormData,
-      //     [name]: parseInt(value),
-      //   }));
-      //   break;
+      // case "ccExpiryMonth" validation is done in BE
       default:
         break;
     }
