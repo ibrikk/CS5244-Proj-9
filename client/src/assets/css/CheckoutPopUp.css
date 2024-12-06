@@ -61,7 +61,7 @@
 .checkout-form {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 10px;
 }
 
 .form-group {
@@ -121,7 +121,10 @@ input {
   color: #cc0033;
   display: inline-block;
   line-height: 15px;
-  margin: 5px 0 0;
+}
+
+.field-title {
+  margin-top: 5px;
 }
 
 .checkout-select {

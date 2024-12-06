@@ -110,8 +110,8 @@ const CheckoutPopup: React.FC = () => {
       case "address":
         if (value.trim() === "") {
           setAddressError("Address is required!");
-        } else if (value.length < 10) {
-          setAddressError("Address must be at least 10 characters long!");
+        } else if (value.length < 4) {
+          setAddressError("Address must be at least 4 characters long!");
         } else {
           setAddressError("");
         }
@@ -224,7 +224,9 @@ const CheckoutPopup: React.FC = () => {
           className="checkout-form"
         >
           <div className="form-group">
-            <label htmlFor="name">Full Name</label>
+            <label htmlFor="name" className="field-title">
+              Full Name
+            </label>
             <input
               id="fname"
               type="text"
@@ -236,7 +238,9 @@ const CheckoutPopup: React.FC = () => {
           <> {nameError && <div className="error"> {nameError}</div>}</>
 
           <div className="form-group">
-            <label htmlFor="address">Address</label>
+            <label htmlFor="address" className="field-title">
+              Address
+            </label>
             <input
               id="faddress"
               type="text"
@@ -248,7 +252,9 @@ const CheckoutPopup: React.FC = () => {
           <> {addressError && <div className="error"> {addressError}</div>}</>
 
           <div className="form-group">
-            <label htmlFor="phone">Phone</label>
+            <label htmlFor="phone" className="field-title">
+              Phone
+            </label>
             <input
               id="fphone"
               type="tel"
@@ -260,7 +266,9 @@ const CheckoutPopup: React.FC = () => {
           <> {phoneError && <div className="error"> {phoneError}</div>}</>
 
           <div className="form-group">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email" className="field-title">
+              Email
+            </label>
             <input
               id="femail"
               type="email"
@@ -272,7 +280,9 @@ const CheckoutPopup: React.FC = () => {
           <> {emailError && <div className="error"> {emailError}</div>}</>
 
           <div className="form-group">
-            <label htmlFor="ccNumber">Credit Card</label>
+            <label htmlFor="ccNumber" className="field-title">
+              Credit Card
+            </label>
             <input
               id="ccNumber"
               type="text"
@@ -285,7 +295,9 @@ const CheckoutPopup: React.FC = () => {
 
           <div className="month-year">
             <div className="form-group">
-              <label htmlFor="ccExpiryMonth">Expiry Month</label>
+              <label htmlFor="ccExpiryMonth" className="field-title">
+                Expiry Month
+              </label>
               <select
                 className="checkout-select"
                 id="ccExpiryMonth"
@@ -305,7 +317,9 @@ const CheckoutPopup: React.FC = () => {
             </div>
 
             <div className="form-group">
-              <label htmlFor="ccExpiryYear">Expiry Year</label>
+              <label htmlFor="ccExpiryYear" className="field-title">
+                Expiry Year
+              </label>
               <select
                 className="checkout-select"
                 id="ccExpiryYear"
